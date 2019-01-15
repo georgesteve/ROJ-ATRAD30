@@ -1,6 +1,8 @@
 # ROJ-ATRAD30
 Repository with code needed to make the comunication between Radar-Arduino-Cloud
   Programs needed to the instalation:
+  
+  
     PC:
       Bitname WAMP(Or whatever WAMP in fact) 
         *Remember scripts in UTF-8 to make a correct comunicattion with Apache2 and python
