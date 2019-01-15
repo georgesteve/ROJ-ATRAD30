@@ -1,5 +1,5 @@
 <?php
-//Step1
+//Step1 -
 
 $username="root";
 $password="gfajardo";
