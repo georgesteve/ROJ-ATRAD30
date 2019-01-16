@@ -1,5 +1,7 @@
+
 <?php
 //Step1 -
+//Este código es la interacción de HTML y Mysql, muestra los datos de Mysql en una tabla en HTML
 
 $username="root";
 $password="gfajardo";
