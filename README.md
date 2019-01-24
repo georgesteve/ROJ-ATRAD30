@@ -11,7 +11,8 @@ Repository with code needed to make the comunication between Radar-Arduino-Cloud
           <Search for the line: "#Add Handler cgi-script .cgi". Uncomment it and add a ".py" in the end.
       Enviorement Python3 and C++
       
-      
+      phpmyadmin .: http://10.10.10.31/phpmyadmin root/gfajardo
+                    http://10.10.10.39/phpmyadmin root/contraseña
       
     Raspberry:
       Raspbian
