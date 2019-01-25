@@ -1,4 +1,4 @@
-#!/Program Files (x86)/Microsoft Visual Studio/Shared/Python36_64/python
+#!/Program Files (x86)/Python37-32/python
 # -*- coding: UTF-8 -*-# enable debugging
 import cgitb
 import time
@@ -6,7 +6,7 @@ import datetime
 import glob
 from time import strftime
 import csv, operator
-#import numpy as np
+import numpy as np
 
 
 
@@ -24,7 +24,8 @@ with open('example.csv') as File:
     j=0
     a=[]
     for row in reader:
-    	
+    	 
+		
         print(row)
         i=i+1
 print(i-1)
