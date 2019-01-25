@@ -3,7 +3,7 @@ Recordar que se debe direccionar el enviroment correctamente para ejecutar el cg
 Es decir la primera línea de código debe apuntar al ejecutable de python y además en este entorno
 las librerías a usar deben estar instaladas correctamente.
 
-#!/Program Files (x86)/Microsoft Visual Studio/Shared/Python37-32/python
+#!/Program Files (x86)/#!/Program Files (x86)/Python37-32/python
 # -*- coding: UTF-8 -*-# enable debugging
 import cgitb
 
