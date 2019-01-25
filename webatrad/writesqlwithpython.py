@@ -1,6 +1,10 @@
 #!/Program Files (x86)/Microsoft Visual Studio/Shared/Python36_64/python
 # -*- coding: UTF-8 -*-# enable debugging
 import cgitb
+import time
+import datetime
+import glob
+from time import strftime
 
 
 cgitb.enable()    
@@ -32,11 +36,24 @@ print()
 
 # Ejecutar sentencia:
 
+dateWrite = time.strftime('%Y-%m-%d')
+timeWrite = time.strftime('%H:%M:%S')
+temperature='39'
 
 
 
-cur.execute("INSERT INTO `temp at interrupt prueba1` (`Date`, `Time`, `Temperature`) VALUES ('2019-01-25', '08:23:01', '29')")
+print(dateWrite)
+print(timeWrite)
+print(temperature)
 
+print(type(dateWrite))
+print(type(timeWrite))
+print(type(temperature))
+
+
+
+
+cur.execute("INSERT INTO `temp at interrupt prueba1` (`Date`, `Time`, `Temperature`) VALUES (%s,%s,%s)",(dateWrite,timeWrite,temperature))
 # Guardar los cambios.
 conn.commit()
 
