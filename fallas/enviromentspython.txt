@@ -1,0 +1,15 @@
+Tener cuidado al correr python desde un servidor web apache
+Recordar que se debe direccionar el enviroment correctamente para ejecutar el cgi::
+Es decir la primera línea de código debe apuntar al ejecutable de python y además en este entorno
+las librerías a usar deben estar instaladas correctamente.
+
+#!/Program Files (x86)/Microsoft Visual Studio/Shared/Python37-32/python
+# -*- coding: UTF-8 -*-# enable debugging
+import cgitb
+
+cgitb.enable()    
+print("Content-Type: text/html;charset=utf-8")
+print()    
+
+
+Esta estructura es básica
