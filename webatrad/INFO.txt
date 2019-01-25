@@ -1,0 +1,1 @@
+This part contains the folders needed in a folder to write in a table sql into a server web with pytohn and show that in a web page. 
