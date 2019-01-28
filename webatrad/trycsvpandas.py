@@ -16,14 +16,16 @@ colnames = ['Power','Temperature']
 data = pd.read_csv('example.csv', names=colnames)
 df=pd.DataFrame(data)
 
-i=df.shape[0]
-print(i)
+i=df.shape[0] #Obtiene el número de filas,
+# si se cambia por 1 se obtiene el número de columnas
 
-element=df.iloc[i-1]
-print(element)
-Powerfianl=print(element.Power)
-Temperaturafinal=print(element.Temperature)
+#print(i)
 
-
+element=df.iloc[i-1] #obtiene propiedades de df
+#print(element)
+Powerfinal=element.Power
+Temperaturafinal=element.Temperature
+print(Powerfinal)
+print(Temperaturafinal)
 #import sys
 #print(sys.version)
