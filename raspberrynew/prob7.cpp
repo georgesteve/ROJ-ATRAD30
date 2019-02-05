@@ -1,3 +1,11 @@
+
+#include "SSTmanager.h"
+#include <stdio.h>  
+#include <iostream>
+#include <stdint.h>
+#include <inttypes.h>
+#include <cstdlib>
+#include <boost/lexical_cast.hpp>
 #define MASK 7
 
 //Define un modo de monitoreo por batch con el siguiente orden: arcp.exe + TX destino + ruta del archivo txt, otro tipo de llamado a la función no funcionará 
