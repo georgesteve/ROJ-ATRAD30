@@ -13,7 +13,7 @@ Repository with code needed to make the comunication between Radar-Arduino-Cloud
       
       phpmyadmin .: http://10.10.10.31/phpmyadmin root/gfajardo
                     http://10.10.10.39/phpmyadmin root/contraseña
-      
+                    http://10.10.10.35/phpmyadmin root/password
     Raspberry:
       Raspbian
       Download MySQLdb module for Python 
