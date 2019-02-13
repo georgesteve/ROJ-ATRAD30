@@ -21,4 +21,5 @@ Repository with code needed to make the comunication between Radar-Arduino-Cloud
       
      
   Web compiler: http://www.cubicfactory.com/jseditor/welcome/130/edit
-  Tutorial LAMP: https://websiteforstudents.com/install-apache2-mariadb-and-php-7-2-with-phpmyadmin-on-ubuntu-16-04-18-04-18-10-lamp-phpmyadmin/
+Tutorial LAMP: https://websiteforstudents.com/install-apache2-mariadb-and-php-7-2-with-phpmyadmin-on-ubuntu-16-04-18-04-18-10-lamp-phpmyadmin/
+Tutorial Runnig python scripts with CGI on apache2 debian: https://www.server-world.info/en/note?os=Debian_9&p=httpd&f=5
