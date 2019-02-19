@@ -31,3 +31,5 @@ Tutorial Runnig python scripts with CGI on apache2 debian: https://www.server-wo
                                                                   systemctl restart apache2
                                                                   service apache2 restart
 CGI-Pthon-apache tutorial:https://www.tutorialspoint.com/python3/python_cgi_programming.htm?fbclid=IwAR3mTsSQu8-h0dOMu0y2bYZ9sB0rMcwuXmw730JRrwJtXepO-4rw7yc-4hY
+
+Instalar Pymysql on raspberry https://stackoverflow.com/questions/33446347/no-module-named-pymysql
