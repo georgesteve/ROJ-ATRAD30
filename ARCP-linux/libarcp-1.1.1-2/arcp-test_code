@@ -1,0 +1,68 @@
+/*
+ * Run some tests on the ARCP library code before trying to use it to
+ * communicate.
+ */
+#if 0
+int j;
+arcp_msg_t *msg = arcp_msg_new(ARCP_MSG_COMMAND);
+arcp_stream_t *stream;
+  msg->command.id = ARCP_CMD_SET_PULSE_PARAM;
+  msg->cmd_set_pulse_param.code = arcp_pulsecode_new(16);
+  arcp_msg_free(msg);
+
+  arcp_msg_new(ARCP_MSG_RESPONSE);
+  msg->response.id = ARCP_RESP_SYSSTAT;
+  msg->resp_sysstat.module_type = ARCP_MODULE_VTM;
+  msg->resp_sysstat.data.vtm.ambient_temp = 32;
+  arcp_msg_set_n_chassis_fans(msg,2);
+  msg->resp_sysstat.data.vtm.fan_speed[0] = 123;
+  msg->resp_sysstat.data.vtm.fan_speed[1] = 321;
+  arcp_msg_set_n_rf_cards(msg,7);
+  for (i=0;i<7;i++) {
+    msg->resp_sysstat.data.vtm.rf_card_stat[i].supply_volts_mv = 50001+i;
+    msg->resp_sysstat.data.vtm.rf_card_stat[i].heatsink_temp = 97+i;
+    arcp_msg_set_n_rf_outputs(msg,i,4);
+    for (j=0; j<4; j++) {
+      msg->resp_sysstat.data.vtm.rf_card_stat[i].output_stat[j].forward_power_w = 10+i*5+j;
+      msg->resp_sysstat.data.vtm.rf_card_stat[i].output_stat[j].swr = i*5+j;
+    }
+  }
+  arcp_msg_encode(msg, &stream);
+  arcp_msg_free(msg);
+  arcp_stream_reset(stream);
+  arcp_stream_decode(stream, &msg);
+  arcp_stream_free(stream);
+
+  printf("ID: %d\n"
+         "Module type: %d\n"
+         "n fans: %d\n"
+         "ambient temp: %d\n"
+         "fan speed: %d %d\n"
+         "n rf cards: %d\n",
+    msg->response.id, msg->resp_sysstat.module_type, 
+    msg->resp_sysstat.data.vtm.n_chassis_fans,
+    msg->resp_sysstat.data.vtm.ambient_temp,
+    msg->resp_sysstat.data.vtm.fan_speed[0],msg->resp_sysstat.data.vtm.fan_speed[1],
+    msg->resp_sysstat.data.vtm.n_rf_cards);
+  for (i=0;i<7;i++) {
+    printf("RF card %d:\n"
+           "  Supply volts: %d\n"
+           "  Heatsink temp: %d\n"
+           "  n rf outputs: %d\n",
+      i, msg->resp_sysstat.data.vtm.rf_card_stat[i].supply_volts_mv,
+      msg->resp_sysstat.data.vtm.rf_card_stat[i].heatsink_temp,
+      msg->resp_sysstat.data.vtm.rf_card_stat[i].n_rf_outputs);
+    for (j=0; j<4; j++) {
+      printf("  Output %d:\n"
+             "    forward power: %d\n"
+             "    swr: %d\n",
+        j,msg->resp_sysstat.data.vtm.rf_card_stat[i].output_stat[j].forward_power_w,
+        msg->resp_sysstat.data.vtm.rf_card_stat[i].output_stat[j].swr);
+    }
+  }
+ 
+  arcp_msg_free(msg);
+return 0;
+
+#endif
+

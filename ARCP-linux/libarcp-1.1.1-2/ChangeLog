@@ -1,0 +1,181 @@
+Changelog for libarcp
+=====================
+
+All entries by Jonathan Woithe (JMW) unless otherwise noted.
+
+
+21 May 2007:
+ - preparation for initial release by explicitly splitting libarcp from
+   arcptalk source code, which is where initial development was carried out
+   in 2006-7.  Currently libarcp is not a library as such - it's a single
+   source file which is compiled to a single object file.  The object file
+   is then linked directly into any programs which require it.  It is
+   anticipated that in time libarcp will be tidied up and split across
+   several source files to make maintenance easier; when this occurs a
+   formal static library will be created.
+   To make use of this library users are encouraged to utilise the
+   libarcp-config script.  This abstracts the details of compilation/link
+   flags and options required to use this library.  If any of these details
+   change in future, projects using this script are unlikely to require many
+   changes to their build processes.
+ - Makefile: initial version created using arcptalk's Makefile as a
+   template.
+ - arcp.{c,h}: added arcp_get_lib_version() and arcp_get_lib_proto_version().
+
+23 May 2007:
+ - Makefile: added support for multiple architectures.  Currently i386-linux
+   and avr-nutos are useable.  The architecture is selected using
+   ARCH=<arch> on the make commandline, where <arch> is one of the supported
+   architectures.  Intermediate object files and the library itself (which
+   at this stage is just a single object file) are put into
+   architecture-specific directories.
+ - libarcp-config: added `--arch' command line option, allowing a user
+   to request flags applicable for a given architecture.  Currently all
+   this does is affect the path to the library's .o file which is now
+   architecture dependent.  The default architecture is i386-linux.
+ - Makefile, libarcp-config: added support for the i386-win32 target.
+ - arcp.{c,h}: added field to arcp_handle_t to keep track of the connection
+   version.  This is set transparently by arcp_msg_read() and is used by
+   arcp_msg_write() to set the outgoing message's protocol version number.
+   Added arcp_handle_get_connection_arcp_version() to report the connection
+   version to a client of the library.  arcp_msg_new() now sets the message's
+   protocol version to 0; the default version is now effectively set in
+   arcp_handle_new() when the connection version number is initialised. 
+   Currently we initialise this to the library's current ARCP version and at 
+   this stage this looks to be the sensible choice.
+   The way version management is anticipated to work is as follows.  If a 
+   master and slave talk the same protocol version things just work as
+   expected.  If a master knows a higher protocol version than the slave,
+   the first packet sent by the master will reflect the higher version.  When
+   the slave receives this it will note that it's from a later protocol
+   version but will not change it's view of the connection's protocol
+   version.  When the slave sends a response to the master that response
+   will reflect the slave's protocol version; the master will read this and
+   downgrade its connection version and use this in all subsequent messages
+   sent to the slave.
+   Conversely, if the slave supports a higher ARCP version than the master,
+   the slave will notice this when the first command is received.  It will
+   downgrade it's connection version and use this in all subsequent
+   responses sent back to the master including the one to the first command.
+   This way protocol version negotiation occurs in the background and
+   generally the user of the library won't have to be concerned with this.
+   Note that the work of dealing with different protocol versions will
+   ultimately fall to the internal libarcp message encode/decode functions.
+   At all times the encoding/decoding must comply with the connection
+   version of the associated ARCP handle object.
+
+24 May 2007:
+ - arcp.h: added ARCP_VTM_CARDMAP_* defines for the VTM card map.
+
+7 June 2007:
+ - arcp.{c,h}: generalised the "external combiner" status mechanism to that
+   of a so-called "VTM unit" and allow there to be more than one type of
+   VTM unit.  This allows the same infrastructure to be used for both
+   monitored internal cards and external units.
+ - Makefile: set CFLAGS for i386-linux architecture case.
+
+12 June 2007:
+ - arcp.{c,h}: tidied up the unit type enumeration and added defines for the
+   controller, RF driver and PA.  Even though these latter 3 are not generic
+   units (since their data fields are explicitly defined in the status
+   structures) they are on the analog bus and so it makes sense to include
+   them.
+
+9 July 2007:
+ - arcp.h: added additional defines for the VTM card map.
+
+25 July 2007:
+ - arcp.h: added ARCP_MODULE_ANY as a synonym for ARCP_MODULE_NONE.  This
+   will make some code more readable.
+
+8 August 2007:
+ - arcp.h: added ARCP_VTM_UNIT_LASTTYPE to provide library clients with
+   a definitive bound on the number of unit types supported.
+
+6 February 2008: v1.0.0
+ - Version 1.0.0 released.
+
+6 February 2008:
+ - arcp.h: bumped build number LIBARCP_VERSION_BUILD to 1 to lead off
+   development of version 1.0.1.  This version is to contain minor *library* 
+   changes only.  The underlying protocol remains version 1.0.
+ - arcp.h: increased ARCP_VTM_EXTCOMB_MAX_N_OUTPUTS from 3 to 6 to allow
+   for the expanded number of outputs one can measure when using the revised
+   combiner monitor board.  Added ARCP_VTM_UNIT_EXT_COMB_SPLIT_TRSW define
+   (equal to ARCP_VTM_UNIT_EXT_COMBINER_SPLITTER) to reflect that this
+   type can now also encompass monitored TR switches.
+ - Makefile: add *.lst files to the "clean" target.  Remove *.o files
+   from the "tidy" target.
+
+18 March 2008: v1.0.1.
+ - Version 1.0.1 released.
+
+18 March 2008:
+ - arcp.h: bumped protocol version to 1.1 which in turn bumps the library
+   version to 1.1.x.  Reset build number to 0 to give library version 1.1.0.
+   Version 1.1.0 will extend the protocol to allow communication with 
+   an ATRAD intelligent beamsteering controller.
+ - arcp.h: added ARCP_CMD_SET_PHASE command identifier.  Added
+   ARCP_MODULE_BEAMSTEER module identifier.  Added arcp_phase_entry_t
+   and arcp_msg_cmd_set_phase_t structure definitions.  Added cmd_set_phase
+   entry to arcp_msg_t union.  Added arcp_set_phase() function prototype.
+ - arcp.c: implement arcp_set_phase().  Add support for the "set phase"
+   command to arcp_msg_free(), arcp_msg_set_stream_size(), store_arcp_cmd(),
+   decode_arcp_cmd().
+ - arcp.c: implement arcp_stream_get_float() and arcp_stream_store_float()
+   which are used when decoding/encoding "set phase" messages.
+
+1 April 2008:
+ - arcp.h: renamed ARCP_MODULE_BEAMSTEER to ARCP_MODULE_BSM.
+ - arcp.{c,h}: added support for a BSM-specific status structure.  This
+   consists of up to ARCP_MAX_N_CHASSIS_FANS (8) fan speeds and
+   ARCP_BSM_MAX_N_TEMPERATURES (8) heatsink temperatures.
+
+2 April 2008:
+ - arcp.{c,h}: added the channel_map field to the BSM status structure.
+ - arcp.c: refactored and generalised management of bitmaps used to flag
+   the presence of submodules.  Added arcp_bsm_{set_present,is_present}() 
+   for use with beemsteering modules.
+
+7 April 2008:
+ - arcp.{c,h}: added phase_slot to the "set phases" ARCP command.  While
+   unused for the initial version of the BSM, multiple phase slots could
+   come into use if point-to-point beamsteering was ever implemented.
+
+16 April 2008:
+ - arcp.{c,h}: added a channel map field to the BSM system ID message.
+
+17 April 2008:
+ - arcp.{c,h}: given the way things are panning out it seems that using a
+   generic name like VTM (VHF Transmitter Module) for STX2 will be
+   suboptimal going forward.  If we were to ever implement another type of
+   VHF transmitter (as opposed to just variations on STX2) it's likely to be
+   structured rather differently to STX2, so the amount of commonality
+   between different VTMs will be fairly low.  To reflect this, references
+   to VTM/vtm have been changed to STX2/stx2 throughout the source code.
+
+27 May 2008:
+ - arcp.c: arcp_pulsecode_setbit(): fix the conditional used to work out
+   whether the code's length is increased by the setting of the bit.  The
+   previous code resulted in an increment only after (zero-based) bits 1, 3
+   etc were set, effectively truncating odd-length pulses to even lengths by
+   omitting the most significant bit.  Note that this bug doesn't affect
+   embedded firmware since arcp_pulsecode_setbit() is not used in production
+   firmware versions.
+
+5 June 2008: v1.1.0
+ - Makefile: for the avr platform, move to compilation against NutOS 4.4.1
+   (from 3.9.8).
+ - arcp.h: rename arcp_stx2unit_stat_t to arcp_extunit_stat_t since the 
+   makeup of generic external unit status structures is not STX2 specific.
+ - version 1.1.0 released.
+
+10 June 2009:
+ - arcp.c: arcp_do_set_params(): call arcp_id_is_response() before testing
+   for responses to prevent all errors being categorised as "unknown
+   response".
+ - arcp.h: bumped LIBARCP_VERSION_STR to "1.1.1".
+
+17 June 2009:
+ - libarcp-config: fixed a superficial cosmetic alignment error in the help
+   text.

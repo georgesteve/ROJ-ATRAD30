@@ -1,0 +1,102 @@
+#!/bin/bash
+#
+# A configuration reporting script for libarcp modelled on pkg-config.  One
+# day we might actually utilise pkg-config, but for now we do it all here.
+#
+# Note" For now this script is assumed to reside in the same directory as
+# libarcp. In other words, libarcp is not designed to be installed for
+# system-wide use.  Consequently only static linking is supported at this
+# stage.
+#
+
+LIBARCP_CONFIG_VER="1.0"
+
+SCRIPT_DIR=$(dirname "$0")
+
+LIBARCP_INCDIR=${SCRIPT_DIR}
+LIBARCP_LIBDIR=${SCRIPT_DIR}
+
+LIBARCP_VERSION=$(grep LIBARCP_VERSION_STR ${SCRIPT_DIR}/arcp.h | cut -d \" -f 2)
+
+if [ "$1" = "" ]; then
+  echo "Must specify mode on the command line"
+  exit 1
+fi
+
+OUTPUT=""
+
+# Set the default architecture
+ARCH=i386-linux
+
+while [ "$1" != "" ]; do
+  case "$1" in
+
+    --help )
+      cat <<-EOF
+	Usage: libarcp-config [OPTION...]
+	  --arch=ARCH           set architecture to ARCH (default is i386-linux)
+	  --version             output version of libarcp-config
+	  --modversion          output version of libarcp
+	  --libs                output all linker flags
+	  --cflags              output all pre-processor and compiler flags
+	  --help                show this help message
+
+        Available architectures are i386-linux, avr-nutos and i386-win32.
+	EOF
+      exit 0
+      ;;
+
+    --arch=* )
+      A=${1#--arch=}
+      if [ ! -z $A ]; then 
+        ARCH=$A
+      fi
+      case "$ARCH" in
+        i386-linux ) ;;
+        avr-nutos  ) ;;
+        i386-win32 ) ;;
+        * ) echo "Unsupported architecture \`${ARCH}'"
+            exit 1
+            ;;
+      esac
+      ;;
+
+    --version )
+      echo ${LIBARCP_CONFIG_VER}
+      exit 0
+      ;;
+
+    --libs )
+      OUTPUT_LIBS=1
+      ;;
+
+    --cflags )
+      OUTPUT_CFLAGS=1
+      ;;
+
+    --modversion )
+      echo ${LIBARCP_VERSION}
+      exit 0
+      ;;
+
+    * )
+      echo "Bad or unknown parameter \`$1'"
+      exit 1
+
+  esac
+  shift
+done
+
+if [ ! -z $OUTPUT_CFLAGS ]; then
+  OUTPUT="${OUTPUT}-I${LIBARCP_INCDIR} "
+fi
+if [ ! -z ${OUTPUT_LIBS} ]; then
+  OUTPUT="${OUTPUT}${LIBARCP_LIBDIR}/${ARCH}/arcp.o "
+fi
+
+if [ "${OUTPUT}" != "" ]; then
+  echo "${OUTPUT}"
+else
+  echo "Must specify mode on the command line"
+  exit 1
+fi
