@@ -1,3 +1,4 @@
+
 # ROJ-ATRAD30
 Repository with code needed to make the comunication between Radar-Arduino-Cloud
   Programs needed to the instalation:
@@ -24,4 +25,9 @@ Repository with code needed to make the comunication between Radar-Arduino-Cloud
 Tutorial LAMP: https://websiteforstudents.com/install-apache2-mariadb-and-php-7-2-with-phpmyadmin-on-ubuntu-16-04-18-04-18-10-lamp-phpmyadmin/
 Tutorial Runnig python scripts with CGI on apache2 debian: https://www.server-world.info/en/note?os=Debian_9&p=httpd&f=5
                                                             https://www.youtube.com/watch?v=mBKU56uMQX4
+                                                            
+                                                            #Luego de hacer todas las configuraciones necesarias:
+                                                                  sudo a2enmod cgi
+                                                                  systemctl restart apache2
+                                                                  service apache2 restart
 CGI-Pthon-apache tutorial:https://www.tutorialspoint.com/python3/python_cgi_programming.htm?fbclid=IwAR3mTsSQu8-h0dOMu0y2bYZ9sB0rMcwuXmw730JRrwJtXepO-4rw7yc-4hY
